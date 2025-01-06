@@ -59,14 +59,6 @@ public class JwtToken {
 
 	}
 
-//	public Claims extractClaims(String token) {
-////        return Jwts.parserBuilder()
-////                   .setSigningKey(getKey()) // Modern way to set the signing key
-////                   .build()
-////                   .parseClaimsJws(token)  // Parses the token and verifies the signature
-////                   .getBody();            // Extracts the claims
-//    }
-
 	public boolean validateToken(String token, UserDetails details) {
 		String username = getUsernameFromtoken(token);
 
