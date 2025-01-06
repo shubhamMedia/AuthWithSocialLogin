@@ -20,17 +20,18 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtToken {
 
+	private final SecretKey key = getKey();
+
 	public String generateToken(UserDetails users) {
 		Map<String, Object> claims = new HashMap<>();
 
-		String key = Base64.getEncoder().encodeToString(getKey().getEncoded());
-
-		byte[] keyBytes = Base64.getDecoder().decode(key);
+//		String key = Base64.getEncoder().encodeToString(getKey().getEncoded());
+//
+//		byte[] keyBytes = Base64.getDecoder().decode(key);
 
 		return Jwts.builder().claims().add(claims).subject(users.getUsername())
 				.issuedAt(new Date(System.currentTimeMillis()))
-				.expiration(new Date(System.currentTimeMillis() + (60 * 60 * 1000))).and()
-				.signWith(Keys.hmacShaKeyFor(keyBytes)).compact();
+				.expiration(new Date(System.currentTimeMillis() + (60 * 60 * 1000))).and().signWith(key).compact();
 
 	}
 
@@ -54,7 +55,7 @@ public class JwtToken {
 
 	private Claims extractAllFromClaims(String token) {
 
-		return Jwts.parser().verifyWith(getKey()).build().parseSignedClaims(token).getPayload();
+		return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
 
 	}
 
@@ -79,13 +80,13 @@ public class JwtToken {
 
 			SecretKey sk = generator.generateKey();
 
-			return sk;
+//			return sk;
 
-//			String key = Base64.getEncoder().encodeToString(sk.getEncoded());
-//
-//			byte[] keyBytes = Base64.getDecoder().decode(key);
-//
-//			return Keys.hmacShaKeyFor(keyBytes);
+			String key = Base64.getEncoder().encodeToString(sk.getEncoded());
+
+			byte[] keyBytes = Base64.getDecoder().decode(key);
+
+			return Keys.hmacShaKeyFor(keyBytes);
 
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block

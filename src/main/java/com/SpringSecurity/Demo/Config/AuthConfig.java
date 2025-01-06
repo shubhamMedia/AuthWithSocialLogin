@@ -42,7 +42,7 @@ public class AuthConfig {
 				.authorizeHttpRequests(
 						request -> request.requestMatchers(PUBLIC_API).permitAll().anyRequest().authenticated())
 				.csrf(csrf -> csrf.disable()).cors(cors -> cors.disable()).httpBasic(httpBasic -> httpBasic.disable())
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
 				.oauth2Login(Customizer.withDefaults())
 				.addFilterBefore(jwtFilters, UsernamePasswordAuthenticationFilter.class);
 

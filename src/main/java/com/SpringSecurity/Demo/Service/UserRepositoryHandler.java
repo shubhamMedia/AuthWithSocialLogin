@@ -5,13 +5,20 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
+
+import com.SpringSecurity.Demo.Entity.Users;
+import com.SpringSecurity.Demo.Repository.UserRepo;
 
 @Service
 public class UserRepositoryHandler implements Consumer<OidcUser> {
 
 	private final UserRepository ur = new UserRepository();
+
+	@Autowired
+	private UserRepo repo;
 
 	@Override
 	public void accept(OidcUser t) {
@@ -20,6 +27,17 @@ public class UserRepositoryHandler implements Consumer<OidcUser> {
 		if (this.ur.findByName(t.getEmail()) == null) {
 			System.out.println("Saving User Date......  ");
 			this.ur.save(t);
+
+			Users user = this.repo.getByUsername(t.getEmail());
+
+			if (user == null) {
+				Users users = new Users();
+				users.setEmail(t.getEmail());
+				users.setName(t.getFullName());
+
+				this.repo.save(users);
+			}
+
 		}
 
 	}
