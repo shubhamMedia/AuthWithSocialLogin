@@ -26,7 +26,6 @@ public class JwtToken {
 		Map<String, Object> claims = new HashMap<>();
 
 //		String key = Base64.getEncoder().encodeToString(getKey().getEncoded());
-//
 //		byte[] keyBytes = Base64.getDecoder().decode(key);
 
 		return Jwts.builder().claims().add(claims).subject(users.getUsername())
